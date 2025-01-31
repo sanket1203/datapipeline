@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-consumer
+  template:
+    metadata:
+      labels:
+        app: kafka-consumer
+    spec:
+      containers:
+      - name: kafka-consumer
+        image: python:3.9
+        command: ["python"]
+        args: ["-u", "consumer.py"]
+        volumeMounts:
+        - name: app-code
+          mountPath: /app
+        workingDir: /app
+      volumes:
+      - name: app-code
+        configMap:
+          name: consumer-code
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: consumer-code
+data:
+  consumer.py: |
+    # Paste the consumer.py code here
