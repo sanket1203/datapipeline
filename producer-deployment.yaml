@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-producer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-producer
+  template:
+    metadata:
+      labels:
+        app: kafka-producer
+    spec:
+      containers:
+      - name: kafka-producer
+        image: python:3.9
+        command: ["python"]
+        args: ["-u", "producer.py"]
+        volumeMounts:
+        - name: app-code
+          mountPath: /app
+        workingDir: /app
+      volumes:
+      - name: app-code
+        configMap:
+          name: producer-code
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: producer-code
+data:
+  producer.py: |
+    # Paste the producer.py code here

@@ -18,3 +18,4 @@ def produce_messages(topic):
 
 if __name__ == "__main__":
     produce_messages("test-topic")
+
